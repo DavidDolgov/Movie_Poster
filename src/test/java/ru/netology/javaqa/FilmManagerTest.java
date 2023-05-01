@@ -1,7 +1,11 @@
 package ru.netology.javaqa;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
+
 
 public class FilmManagerTest {
 
@@ -19,57 +23,75 @@ public class FilmManagerTest {
     FilmItem item11 = new FilmItem(27, "curiosa.ht", "Curiosa", "historical", 31);
     FilmItem item12 = new FilmItem(14, "the-Gentlemen.com", "The Gentlemen", "action", 20);
 
+    FilmRepository repo = new FilmRepository();
+    FilmManager manager = new FilmManager(repo);
+
+
+
+    @BeforeEach
+    public void setup() {
+        manager.add(item1);
+        manager.add(item3);
+        manager.add(item2);
+        manager.add(item5);
+        manager.add(item4);
+        manager.add(item7);
+        manager.add(item6);
+        manager.add(item8);
+        manager.add(item9);
+        manager.add(item10);
+        manager.add(item11);
+        manager.add(item12);
+
+    }
+
 
     @Test
     public void shouldAddNewFilms() {
-        FilmManager manager = new FilmManager();
-        manager.save(item1);
-        manager.save(item2);
-        manager.save(item3);
-        manager.save(item4);
-        manager.save(item5);
-        manager.save(item6);
-        manager.save(item7);
-        manager.save(item10);
 
-        FilmItem[] expected = {item1, item2, item3, item4, item5, item6, item7, item10};
-        FilmItem[] actual = manager.getItems();
-
-        Assertions.assertArrayEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldKeepInOrderOfAddition() {
-        FilmManager manager = new FilmManager();
-        manager.save(item3);
-        manager.save(item1);
-        manager.save(item2);
-        manager.save(item8);
-        manager.save(item9);
-        manager.save(item11);
-        manager.save(item12);
-
-        FilmItem[] expected = {item3, item1, item2, item8, item9, item11, item12};
+        FilmItem[] expected = {item1, item3, item2, item5, item4, item7, item6, item8, item9, item10, item11, item12};
         FilmItem[] actual = manager.findAll();
 
         Assertions.assertArrayEquals(expected, actual);
     }
 
     @Test
-    public void shouldOutputTheLatestAddedFilmsInReverseOrder(){
-        FilmManager manager = new FilmManager(5);
-        manager.save(item3);
-        manager.save(item1);
-        manager.save(item2);
-        manager.save(item8);
-        manager.save(item9);
-        manager.save(item11);
-        manager.save(item12);
+    public void shouldOutputTheLatestAddedFilmsInReverseOrder() {
+        FilmManager manager1 = new FilmManager(repo,5);
 
-        FilmItem[] expected = {item12, item11, item9, item8, item2};
-        FilmItem[] actual = manager.findLast();
-
+        FilmItem[] expected = {item12, item11, item10, item9, item8};
+        FilmItem[] actual = manager1.findLast();
         Assertions.assertArrayEquals(expected, actual);
 
     }
+
+    FilmRepository repo1 = Mockito.mock(FilmRepository.class);
+
+    FilmManager manager1 = new FilmManager(repo1);
+
+    @Test
+    public void shouldAddNewFilmsMockito() {
+        FilmItem[] items = {item12, item11, item10, item9, item8, item7, item6, item5, item4, item3, item2, item1};
+        doReturn(items).when(repo1).findAll();
+
+        FilmItem[] expected = {item12, item11, item10, item9, item8, item7, item6, item5, item4, item3, item2, item1};
+        FilmItem[] actual = manager1.findAll();
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldOutputTheLatestAddedFilmsInReverseOrderMockito() {
+        FilmManager manager1 = new FilmManager(repo1,5);
+        FilmItem[] items = {item12, item11, item10, item9, item8, item7, item6, item5, item4, item3, item2, item1};
+        doReturn(items).when(repo1).findAll();
+
+        FilmItem[] expected = {item1, item2, item3, item4, item5};
+        FilmItem[] actual = manager1.findLast();
+        Assertions.assertArrayEquals(expected, actual);
+
+    }
+
+
+
 }

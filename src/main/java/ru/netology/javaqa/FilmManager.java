@@ -2,35 +2,32 @@ package ru.netology.javaqa;
 
 public class FilmManager {
     private int maximumLimit = 10;
-    private FilmItem[] items = new FilmItem[0];
+    private FilmRepository repo;
 
     public FilmManager() {
     }
 
-    public FilmManager(int maximumLimit) {
+      public FilmManager(FilmRepository repo) {
+          this.repo = repo;
+     }
+
+    public FilmManager(FilmRepository repo, int maximumLimit) {
+        this.repo = repo;
         this.maximumLimit = maximumLimit;
     }
 
-    public void save(FilmItem item) {
-        FilmItem[] tmp = new FilmItem[items.length + 1];
-        for (int i = 0; i < items.length; i++) {
-            tmp[i] = items[i];
-        }
-        tmp[tmp.length - 1] = item;
-        items = tmp;
+    public void add(FilmItem item) {
+        repo.save(item);
     }
 
-    public FilmItem[] getItems() {
-        return items;
-    }
 
     public FilmItem[] findAll() {
-        FilmItem[] all = getItems();
+        FilmItem[] all = repo.findAll();
         return all;
     }
 
     public FilmItem[] findLast() {
-        FilmItem[] all = getItems();
+        FilmItem[] all = repo.findAll();
         int resultLength = all.length;
         if (resultLength > maximumLimit) {
             resultLength = maximumLimit;
