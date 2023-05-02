@@ -20,17 +20,13 @@ public class FilmManager {
         items = tmp;
     }
 
-    public FilmItem[] getItems() {
-        return items;
-    }
-
     public FilmItem[] findAll() {
-        FilmItem[] all = getItems();
+        FilmItem[] all = items;
         return all;
     }
 
     public FilmItem[] findLast() {
-        FilmItem[] all = getItems();
+        FilmItem[] all = items;
         int resultLength = all.length;
         if (resultLength > maximumLimit) {
             resultLength = maximumLimit;

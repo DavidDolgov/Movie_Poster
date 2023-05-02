@@ -33,7 +33,7 @@ public class FilmManagerTest {
         manager.save(item10);
 
         FilmItem[] expected = {item1, item2, item3, item4, item5, item6, item7, item10};
-        FilmItem[] actual = manager.getItems();
+        FilmItem[] actual = manager.findAll();
 
         Assertions.assertArrayEquals(expected, actual);
     }
@@ -56,7 +56,7 @@ public class FilmManagerTest {
     }
 
     @Test
-    public void shouldOutputTheLatestAddedFilmsInReverseOrder(){
+    public void shouldOutputTheLatestAddedFilmsInReverseOrderWhenMoreFilms(){
         FilmManager manager = new FilmManager(5);
         manager.save(item3);
         manager.save(item1);
@@ -67,6 +67,35 @@ public class FilmManagerTest {
         manager.save(item12);
 
         FilmItem[] expected = {item12, item11, item9, item8, item2};
+        FilmItem[] actual = manager.findLast();
+
+        Assertions.assertArrayEquals(expected, actual);
+
+    }
+
+    @Test
+    public void shouldOutputTheLatestAddedFilmsInReverseOrderWhenEqualLimit(){
+        FilmManager manager = new FilmManager(5);
+        manager.save(item2);
+        manager.save(item8);
+        manager.save(item9);
+        manager.save(item11);
+        manager.save(item12);
+
+        FilmItem[] expected = {item12, item11, item9, item8, item2};
+        FilmItem[] actual = manager.findLast();
+
+        Assertions.assertArrayEquals(expected, actual);
+
+    }
+
+    @Test
+    public void shouldOutputTheLatestAddedFilmsInReverseOrderWhenfewerLessLimit(){
+        FilmManager manager = new FilmManager(5);
+        manager.save(item11);
+        manager.save(item12);
+
+        FilmItem[] expected = {item12, item11};
         FilmItem[] actual = manager.findLast();
 
         Assertions.assertArrayEquals(expected, actual);
